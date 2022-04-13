@@ -35,4 +35,14 @@ public class Product {
     public String getServiceAddress() {
         return serviceAddress;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+            "productId=" + productId +
+            ", name='" + name + '\'' +
+            ", weight=" + weight +
+            ", serviceAddress='" + serviceAddress + '\'' +
+            '}';
+    }
 }

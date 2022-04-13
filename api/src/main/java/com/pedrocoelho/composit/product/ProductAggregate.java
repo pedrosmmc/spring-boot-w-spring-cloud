@@ -1,4 +1,4 @@
-package com.pedrocoelho.product;
+package com.pedrocoelho.composit.product;
 
 import java.util.List;
 
