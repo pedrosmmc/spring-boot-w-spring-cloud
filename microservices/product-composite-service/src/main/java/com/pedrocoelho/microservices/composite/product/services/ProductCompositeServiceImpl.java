@@ -1,10 +1,10 @@
 package com.pedrocoelho.microservices.composite.product.services;
 
-import com.pedrocoelho.composit.product.*;
-import com.pedrocoelho.core.product.Product;
-import com.pedrocoelho.core.recommendation.Recommendation;
-import com.pedrocoelho.core.review.Review;
-import com.pedrocoelho.http.ServiceUtil;
+import com.pedrocoelho.api.composit.product.*;
+import com.pedrocoelho.api.core.product.Product;
+import com.pedrocoelho.api.core.recommendation.Recommendation;
+import com.pedrocoelho.api.core.review.Review;
+import com.pedrocoelho.util.http.ServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

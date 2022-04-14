@@ -1,4 +1,4 @@
-package com.pedrocoelho.core.product;
+package com.pedrocoelho.api.core.product;
 
 public class Product {
     private final int productId;

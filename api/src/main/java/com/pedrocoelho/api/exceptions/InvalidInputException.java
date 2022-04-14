@@ -1,4 +1,4 @@
-package com.pedrocoelho.exceptions;
+package com.pedrocoelho.api.exceptions;
 
 public class InvalidInputException extends RuntimeException {
     public InvalidInputException() {

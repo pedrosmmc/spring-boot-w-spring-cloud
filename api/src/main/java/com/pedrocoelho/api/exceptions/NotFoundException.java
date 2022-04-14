@@ -1,4 +1,4 @@
-package com.pedrocoelho.exceptions;
+package com.pedrocoelho.api.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException() {

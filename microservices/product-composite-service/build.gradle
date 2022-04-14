@@ -6,10 +6,14 @@ plugins {
 
 group = 'com.pedrocoelho.microservices.composite.product'
 version = '1.0.0-SNAPSHOT'
-sourceCompatibility = 11
+sourceCompatibility = 16
 
 repositories {
 	mavenCentral()
+}
+
+jar {
+	enabled = false
 }
 
 /* INFO: We need to add api and util projects as dependencies */

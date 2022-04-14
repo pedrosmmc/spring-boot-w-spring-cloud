@@ -1,4 +1,4 @@
-package com.pedrocoelho.http;
+package com.pedrocoelho.util.http;
 
 import org.springframework.http.HttpStatus;
 

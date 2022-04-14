@@ -1,4 +1,4 @@
-package com.pedrocoelho.composit.product;
+package com.pedrocoelho.api.composit.product;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

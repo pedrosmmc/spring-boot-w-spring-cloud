@@ -2,10 +2,10 @@ package com.pedrocoelho.microservices.core.review.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.pedrocoelho.core.review.Review;
-import com.pedrocoelho.core.review.ReviewService;
-import com.pedrocoelho.exceptions.InvalidInputException;
-import com.pedrocoelho.http.ServiceUtil;
+import com.pedrocoelho.api.core.review.Review;
+import com.pedrocoelho.api.core.review.ReviewService;
+import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.util.http.ServiceUtil;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;

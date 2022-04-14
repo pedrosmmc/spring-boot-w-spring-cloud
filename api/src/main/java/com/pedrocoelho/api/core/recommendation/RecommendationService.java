@@ -1,4 +1,4 @@
-package com.pedrocoelho.core.recommendation;
+package com.pedrocoelho.api.core.recommendation;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

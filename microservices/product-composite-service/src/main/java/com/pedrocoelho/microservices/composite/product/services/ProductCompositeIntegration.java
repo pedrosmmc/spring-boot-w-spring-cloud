@@ -1,15 +1,15 @@
 package com.pedrocoelho.microservices.composite.product.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pedrocoelho.core.product.Product;
-import com.pedrocoelho.core.product.ProductService;
-import com.pedrocoelho.core.recommendation.Recommendation;
-import com.pedrocoelho.core.recommendation.RecommendationService;
-import com.pedrocoelho.core.review.Review;
-import com.pedrocoelho.core.review.ReviewService;
-import com.pedrocoelho.exceptions.InvalidInputException;
-import com.pedrocoelho.exceptions.NotFoundException;
-import com.pedrocoelho.http.HttpErrorInfo;
+import com.pedrocoelho.api.core.product.Product;
+import com.pedrocoelho.api.core.product.ProductService;
+import com.pedrocoelho.api.core.recommendation.Recommendation;
+import com.pedrocoelho.api.core.recommendation.RecommendationService;
+import com.pedrocoelho.api.core.review.Review;
+import com.pedrocoelho.api.core.review.ReviewService;
+import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.api.exceptions.NotFoundException;
+import com.pedrocoelho.util.http.HttpErrorInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,7 +55,7 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
     /* INFO: This method can be used in RestTemplate. The expected response is a Product object, and it can be expressed in the call to getForObject() by specifying the Product.class class that RestTemplate will map the JSON response to. */
     @Override
     public Product getProduct(int productId) {
-        LOG.info("expected URL {}}<productId>", productServiceUrl);
+        LOG.info("expected URL request format {}}<productId>", productServiceUrl);
         try {
             String url = productServiceUrl + productId;
             LOG.debug("Will call getProduct API on URL: {}", url);
@@ -84,7 +84,7 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
 
     @Override
     public List<Recommendation> getRecommendations(int productId) {
-        LOG.info("expected URL {}<productId>", recommendationServiceUrl);
+        LOG.info("expected URL request format {}<productId>", recommendationServiceUrl);
         try {
             String url = recommendationServiceUrl + productId;
             List<Recommendation> recommendations = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<Recommendation>>() { }).getBody();
@@ -105,7 +105,7 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
 
     @Override
     public List<Review> getReviews(int productId) {
-        LOG.info("expected URL {}<productId>",reviewServiceUrl);
+        LOG.info("expected URL request format {}<productId>",reviewServiceUrl);
         try {
             String url = reviewServiceUrl + productId;
             List<Review> reviews = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() { }).getBody();

@@ -1,4 +1,4 @@
-package com.pedrocoelho.core.product;
+package com.pedrocoelho.api.core.product;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

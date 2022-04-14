@@ -1,4 +1,4 @@
-package com.pedrocoelho.composit.product;
+package com.pedrocoelho.api.composit.product;
 
 import java.util.List;
 

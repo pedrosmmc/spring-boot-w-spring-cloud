@@ -1,15 +1,14 @@
 package com.pedrocoelho.microservices.core.recommendation.services;
 
-import com.pedrocoelho.core.recommendation.Recommendation;
-import com.pedrocoelho.core.recommendation.RecommendationService;
-import com.pedrocoelho.exceptions.InvalidInputException;
-import com.pedrocoelho.http.ServiceUtil;
+import com.pedrocoelho.api.core.recommendation.Recommendation;
+import com.pedrocoelho.api.core.recommendation.RecommendationService;
+import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /* INFO: We create our service implementation in order to  implemente the Java interface from the api project and annotate the class with @RestController so that Spring will call the methods in this class according to the mappings specified in the Interface class. */

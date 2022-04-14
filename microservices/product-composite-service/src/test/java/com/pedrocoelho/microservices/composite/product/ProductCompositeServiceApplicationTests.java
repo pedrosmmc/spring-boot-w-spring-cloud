@@ -1,10 +1,10 @@
 package com.pedrocoelho.microservices.composite.product;
 
-import com.pedrocoelho.core.product.Product;
-import com.pedrocoelho.core.recommendation.Recommendation;
-import com.pedrocoelho.core.review.Review;
-import com.pedrocoelho.exceptions.InvalidInputException;
-import com.pedrocoelho.exceptions.NotFoundException;
+import com.pedrocoelho.api.core.product.Product;
+import com.pedrocoelho.api.core.recommendation.Recommendation;
+import com.pedrocoelho.api.core.review.Review;
+import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.api.exceptions.NotFoundException;
 import com.pedrocoelho.microservices.composite.product.services.ProductCompositeIntegration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

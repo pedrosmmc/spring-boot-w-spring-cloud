@@ -1,10 +1,10 @@
 package com.pedrocoelho.microservices.core.product.services;
 
-import com.pedrocoelho.core.product.Product;
-import com.pedrocoelho.core.product.ProductService;
-import com.pedrocoelho.exceptions.InvalidInputException;
-import com.pedrocoelho.exceptions.NotFoundException;
-import com.pedrocoelho.http.ServiceUtil;
+import com.pedrocoelho.api.core.product.Product;
+import com.pedrocoelho.api.core.product.ProductService;
+import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.api.exceptions.NotFoundException;
+import com.pedrocoelho.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;

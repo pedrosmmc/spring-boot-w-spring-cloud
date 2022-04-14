@@ -1,7 +1,7 @@
-package com.pedrocoelho.http;
+package com.pedrocoelho.util.http;
 
-import com.pedrocoelho.exceptions.InvalidInputException;
-import com.pedrocoelho.exceptions.NotFoundException;
+import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.api.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
