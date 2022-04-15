@@ -55,7 +55,7 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
     /* INFO: This method can be used in RestTemplate. The expected response is a Product object, and it can be expressed in the call to getForObject() by specifying the Product.class class that RestTemplate will map the JSON response to. */
     @Override
     public Product getProduct(int productId) {
-        LOG.info("expected URL request format {}}<productId>", productServiceUrl);
+        if (productId < 1) throw new InvalidInputException("Invalid productId: " + productId);
         try {
             String url = productServiceUrl + productId;
             LOG.debug("Will call getProduct API on URL: {}", url);
@@ -64,14 +64,13 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
             return product;
         } catch (HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
-                case NOT_FOUND:
-                    throw new NotFoundException(getErrorMessage(ex));
-                case UNPROCESSABLE_ENTITY:
-                    throw new InvalidInputException(getErrorMessage(ex));
-                default:
+                case NOT_FOUND -> throw new NotFoundException(getErrorMessage(ex));
+                case UNPROCESSABLE_ENTITY -> throw new InvalidInputException(getErrorMessage(ex));
+                default -> {
                     LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
                     LOG.warn("Error body: {}", ex.getResponseBodyAsString());
                     throw ex;
+                }
             }
         }
     }
@@ -84,42 +83,36 @@ public class ProductCompositeIntegration implements ProductService, ReviewServic
 
     @Override
     public List<Recommendation> getRecommendations(int productId) {
-        LOG.info("expected URL request format {}<productId>", recommendationServiceUrl);
         try {
             String url = recommendationServiceUrl + productId;
-            List<Recommendation> recommendations = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<Recommendation>>() { }).getBody();
-            return recommendations;
+            return restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<Recommendation>>() { }).getBody();
         } catch (HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
-                case NOT_FOUND:
-                    throw new NotFoundException(getErrorMessage(ex));
-                case UNPROCESSABLE_ENTITY:
-                    throw new InvalidInputException(getErrorMessage(ex));
-                default:
+                case NOT_FOUND -> throw new NotFoundException(getErrorMessage(ex));
+                case UNPROCESSABLE_ENTITY -> throw new InvalidInputException(getErrorMessage(ex));
+                default -> {
                     LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
                     LOG.warn("Error body: {}", ex.getResponseBodyAsString());
                     throw ex;
+                }
             }
         }
     }
 
     @Override
     public List<Review> getReviews(int productId) {
-        LOG.info("expected URL request format {}<productId>",reviewServiceUrl);
         try {
             String url = reviewServiceUrl + productId;
-            List<Review> reviews = restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() { }).getBody();
-            return reviews;
+            return restTemplate.exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() { }).getBody();
         } catch (HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
-                case NOT_FOUND:
-                    throw new NotFoundException(getErrorMessage(ex));
-                case UNPROCESSABLE_ENTITY:
-                    throw new InvalidInputException(getErrorMessage(ex));
-                default:
+                case NOT_FOUND -> throw new NotFoundException(getErrorMessage(ex));
+                case UNPROCESSABLE_ENTITY -> throw new InvalidInputException(getErrorMessage(ex));
+                default -> {
                     LOG.warn("Got an unexpected HTTP error: {}, will retrhow it", ex.getStatusCode());
                     LOG.warn("Error body: {}", ex.getResponseBodyAsString());
                     throw ex;
+                }
             }
         }
     }
