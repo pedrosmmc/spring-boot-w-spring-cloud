@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+/* INFO: To document the actual API and its RESTful operations, we add an @Tag annotation to the Java interface declaration. */
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
@@ -16,6 +17,7 @@ public interface ProductCompositeService {
      * @param productId Id of the product
      * @return the composite product info, if found, else null
      */
+    /* INFO: For each RESTful operation in the API, we add an @Operation annotation, along with @ApiResponse annotations on the corresponding Java method, to describe the operation and its expected responses. We will describe both successful and error responses. */
     @Operation(
         summary = "${api.product-composite.get-composite-product.description}",
         description = "${api.product-composite.get-composite-product.notes}"

@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan("com.pedrocoelho")
 public class ProductCompositeServiceApplication {
 
+    /* INFO: The api* variables that are used to configure the OpenAPI bean are initialized from the property file using Spring @Value annotations. */
     @Value("${api.common.version}")
     String apiVersion;
     @Value("${api.common.title}")
@@ -41,6 +42,7 @@ public class ProductCompositeServiceApplication {
     String apiContactEmail;
 
     /**
+     * Defines a Spring Bean that returns an OpenAPI bean
      * Will exposed at $HOST:$PORT/swagger-ui.html
      *
      * @return OpenAPI documentation
