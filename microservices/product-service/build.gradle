@@ -1,27 +1,45 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.pedrocoelho.microservices.core.product'
 version = '1.0.0-SNAPSHOT'
 sourceCompatibility = 16
 
-repositories {
-	mavenCentral()
-}
+ext { mapstructVersion = "1.4.2.Final" }
+
+repositories { mavenCentral() }
+
+jar { enabled = false }
 
 /* INFO: We need to add api and util projects as dependencies */
 dependencies {
-	implementation project(':api')
-	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
+    implementation project(':api')
+    implementation project(':util')
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+
+
+    /* INFO: To make the compile-time generation work in popular IDEs such as IntelliJ IDEA, we also need to add the following dependency. */
+    compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    /* INFO: Since MapStruct generates the implementation of the bean mappings at compile time by processing MapStruct annotations, we need to add an annotationProcessor and a testAnnotationProcessor dependencies. */
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+
+    /* INFO: To enable the use of MongoDB when running automated integration tests, we will use Testcontainers and its support for JUnit 5, MongoDB. Testcontainers (https://www.testcontainers.org) is a library that simplifies running automated integration tests by running resource managers like a database or a message broker as a Docker container. Testcontainers can be configured to automatically start up Docker containers when JUnit tests are started and tear down the containers when the tests are complete. */
+    implementation platform('org.testcontainers:testcontainers-bom:1.15.2')
+    testImplementation 'org.testcontainers:testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mongodb'
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

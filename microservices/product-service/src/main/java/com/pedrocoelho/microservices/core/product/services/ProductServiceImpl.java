@@ -4,45 +4,63 @@ import com.pedrocoelho.api.core.product.Product;
 import com.pedrocoelho.api.core.product.ProductService;
 import com.pedrocoelho.api.exceptions.InvalidInputException;
 import com.pedrocoelho.api.exceptions.NotFoundException;
+import com.pedrocoelho.microservices.core.product.repository.ProductEntity;
+import com.pedrocoelho.microservices.core.product.repository.ProductRepository;
 import com.pedrocoelho.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/* INFO: We create our service implementation in order to  implemente the Java interface from the api project and annotate the class with @RestController so that Spring will call the methods in this class according to the mappings specified in the Interface class. */
 @RestController
 public class ProductServiceImpl implements ProductService {
-
   private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
-
-  /* INFO: To enable ServiceUtil class from the util project, we inject it into the constructor. */
   private final ServiceUtil serviceUtil;
+  private final ProductRepository repository;
+  private final ProductMapper mapper;
 
-  public ProductServiceImpl(ServiceUtil serviceUtil) { this.serviceUtil = serviceUtil; }
+  @Autowired
+  public ProductServiceImpl(ProductRepository repository, ProductMapper mapper, ServiceUtil serviceUtil) {
+    this.repository = repository;
+    this.mapper = mapper;
+    this.serviceUtil = serviceUtil;
+  }
+
+  @Override
+  public Product createProduct(Product body) {
+    try {
+      ProductEntity entity = mapper.modelToEntity(body);
+      ProductEntity newEntity = repository.save(entity);
+
+      LOG.debug("createProduct: entity created for productId: {}", body.getProductId());
+      return mapper.entityToModel(newEntity);
+    } catch (DuplicateKeyException dke) {
+      throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId());
+    }
+  }
 
   @Override
   public Product getProduct(int productId) {
 
-      if (productId < 1) throw new InvalidInputException("Invalid productId: " + productId);
-
-    /* INFO: Since we aren't currently using a database, we simply return a hardcoded response based on the input of productId, along with the service address supplied by the ServiceUtil. */
-   List<Integer> availableProductsIds = new ArrayList<>(){{
-     add(123);
-     add(254);
-     add(999);
-   }};
-
-    if(!availableProductsIds.contains(productId)) {
-      LOG.debug("No product found for productId: {}", productId);
-      throw new NotFoundException("Not found product with id: " + productId);
+    if(productId < 1) {
+      throw new InvalidInputException("Invalid productId: " + productId);
     }
 
-    Product product =  new Product(productId, "name-" + productId, 123, serviceUtil.getServiceAddress());
+    ProductEntity entity = repository.findByProductId(productId)
+        .orElseThrow(() -> new NotFoundException("No product found for productId: " + productId));
 
-    LOG.debug("/product response: {}", product);
-    return product ;
+    Product response = mapper.entityToModel(entity);
+    response.setServiceAddress(serviceUtil.getServiceAddress());
+
+    LOG.debug("getProduct: found productId: {}", response.getProductId());
+
+    return response;
+  }
+
+  @Override
+  public void deleteProduct(int productId) {
+    LOG.debug("deleteProduct: tries to delete an entity with productId: {}", productId);
+    repository.findByProductId(productId).ifPresent(e -> repository.delete(e));
   }
 }

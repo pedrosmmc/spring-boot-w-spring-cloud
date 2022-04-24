@@ -3,44 +3,70 @@ package com.pedrocoelho.microservices.core.recommendation.services;
 import com.pedrocoelho.api.core.recommendation.Recommendation;
 import com.pedrocoelho.api.core.recommendation.RecommendationService;
 import com.pedrocoelho.api.exceptions.InvalidInputException;
+import com.pedrocoelho.microservices.core.recommendation.repository.RecommendationEntity;
+import com.pedrocoelho.microservices.core.recommendation.repository.RecommendationRepository;
 import com.pedrocoelho.util.http.ServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/* INFO: We create our service implementation in order to  implemente the Java interface from the api project and annotate the class with @RestController so that Spring will call the methods in this class according to the mappings specified in the Interface class. */
 @RestController
 public class RecommendationServiceImpl implements RecommendationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceImpl.class);
 
-    /* INFO: To enable ServiceUtil class from the util project, we inject it into the constructor. */
-    private final ServiceUtil serviceUtil;
+  private final RecommendationRepository repository;
 
-    public RecommendationServiceImpl(ServiceUtil serviceUtil) { this.serviceUtil = serviceUtil; }
+  private final RecommendationMapper mapper;
 
-    @Override
-    public List<Recommendation> getRecommendations(int productId) {
+  private final ServiceUtil serviceUtil;
 
-        if (productId < 1) throw new InvalidInputException("Invalid productId: " + productId);
+  @Autowired
+  public RecommendationServiceImpl(RecommendationRepository repository, RecommendationMapper mapper, ServiceUtil serviceUtil) {
 
-        if (productId == 213) {
-            LOG.debug("No recommendations found for productId: {}", productId);
-            return new ArrayList<>();
-        }
+    this.repository = repository;
+    this.mapper = mapper;
+    this.serviceUtil = serviceUtil;
+  }
 
-        List<Recommendation> recommendationList = new ArrayList<>();
-        recommendationList.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", serviceUtil.getServiceAddress()));
-        recommendationList.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", serviceUtil.getServiceAddress()));
-        recommendationList.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", serviceUtil.getServiceAddress()));
-        recommendationList.add(new Recommendation(productId, 4, "Author 4", 4, "Content 5", serviceUtil.getServiceAddress()));
-        recommendationList.add(new Recommendation(productId, 5, "Author 5", 5, "Content 5", serviceUtil.getServiceAddress()));
+  @Override
+  public Recommendation createRecommendation(Recommendation body) {
 
-        LOG.debug("/recommendation response size: {}", recommendationList.size());
+    try {
+      RecommendationEntity entity = mapper.modelToEntity(body);
+      RecommendationEntity newEntity = repository.save(entity);
 
-        return recommendationList;
+      LOG.debug("createRecommendation: created a recommendation entity: {}/{}", body.getProductId(), body.getRecommendationId());
+      return mapper.entityToModel(newEntity);
+
+    } catch (DuplicateKeyException dke) {
+      throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId() + ", Recommendation Id: " + body.getRecommendationId());
     }
+  }
+
+  @Override
+  public List<Recommendation> getRecommendations(int productId) {
+
+    if (productId < 1) {
+      throw new InvalidInputException("Invalid productId: " + productId);
+    }
+
+    List<RecommendationEntity> entityList = repository.findByProductId(productId);
+    List<Recommendation> list = mapper.entityListToModelList(entityList);
+    list.forEach(e -> e.setServiceAddress(serviceUtil.getServiceAddress()));
+
+    LOG.debug("getRecommendations: response size: {}", list.size());
+
+    return list;
+  }
+
+  @Override
+  public void deleteRecommendations(int productId) {
+    LOG.debug("deleteRecomendation: tries to delete recommendations for the product with productId: {}", productId);
+    repository.deleteAll(repository.findByProductId(productId));
+  }
 }

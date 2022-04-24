@@ -1,12 +1,23 @@
 server.port: 7001
 server.error.include-message: always
 
+# INFO: needs to be added in order to acheiver duplicated key error
+spring.data.mongodb.auto-index-creation: true
+
+spring.data.mongodb:
+  host: localhost
+  port: 27017
+  database: product-db
+
 logging:
   level:
     root: INFO
     com.pedrocoelho: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
+
+spring.data.mongodb.host: mongodb
